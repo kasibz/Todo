@@ -1,0 +1,29 @@
+// To start off, let’s define the list of features our to-do list app has:
+// o	Add a task
+// o	Edit a task
+// o	Mark tasks as done
+// o	Delete a task
+// o	Clear all tasks
+// First off, out to do list app must need an option that we can add a task to the list, and later on, we can edit the task as we want. Next, after finishing a task, we should mark it as complete and move this task to another section. Also, we want to make our app more flexible, so we add another option to delete an unfinished task. After all, when the list becomes too verbose, we have a last option to clear all the tasks, both completed and uncompleted.
+
+
+// grab the add button and do something
+let addButton = document.getElementById('add-Btn')
+let addButtonInput = document.getElementById('new-task') // no Input yet so wait
+let taskList = document.getElementById('incomplete-tasks')
+
+// so this needs to append a check box ul type thing with text and two buttons to the section2
+addButton.addEventListener('click', () => {
+    taskList.appendChild(createTask(addButtonInput.value))
+})
+
+// lets write function to make the 'line' for the entries
+function createTask(text) {
+    let bullet = document.createElement("li")
+    let checkbox = document.createElement("input")
+    checkbox.type = "checkbox"
+    let txt = document.createTextNode(text)
+    bullet.appendChild(checkbox)
+    bullet.appendChild(txt)
+    return bullet
+}
