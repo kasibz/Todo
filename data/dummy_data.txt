@@ -1,0 +1,16 @@
+INSERT INTO `todo`.`todoitem`
+(
+`taskName`,
+`dateCreated`,
+`dateCompleted`,
+`completionStatus`,
+`priority`,
+`timeToComplete`)
+VALUES
+(
+'wake up for work',
+'2023-02-01',
+'2023-03-01',
+0,
+'high',
+'2 hours');
