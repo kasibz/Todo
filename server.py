@@ -17,9 +17,16 @@ mysql = MySQL(app)
 def home():
     return render_template("index.html")
 
-@app.route("/login")
+@app.route("/login", methods = ["GET", "POST"])
 def login():
-    return render_template("login.html")
+    if request.method == "GET":
+        return render_template("login.html")
+    
+    if request.method == "POST":
+        print(request.form.get('username'))
+        print(request.form.get('password'))
+        return ({"message":"Hit the post successfully"})
+
 
 @app.route("/logout")
 def logout():
@@ -47,7 +54,7 @@ def post_todo():
                 INSERT INTO todoitem (taskName, dateCompleted, completionStatus)
                     VALUES (%s, %s, %s)''', (taskName, dateCompleted, completionStatus))
             mysql.connection.commit()
-        return "posted sucessfully"
+        return ({"message":"posted sucessfully"})
     
     except Exception as e:
         return jsonify({'error': str(e)})
