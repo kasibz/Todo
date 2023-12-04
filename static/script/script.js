@@ -29,6 +29,7 @@ function createTask(text) {
 
     let editBtn = document.createElement("button")
     editBtn.textContent = "Edit"
+    editBtn.onclick = (() => editTask(editBtn))
 
     let deleteBtn = document.createElement("button")
     deleteBtn.textContent = "Delete"
@@ -46,4 +47,42 @@ function deleteTask(btn) {
     let li = btn.parentNode
     let ul = li.parentNode
     ul.removeChild(li)
+}
+
+function editTask(btn) {
+    let li = btn.parentNode
+    let ul = li.parentNode
+    let p = btn.previousElementSibling
+    let existingText = p.textContent
+
+    let input = document.createElement("input")
+    input.type = "text"
+    input.value = p.textContent
+
+    li.replaceChild(input, p)
+
+
+    let saveBtn = document.createElement("button")
+    saveBtn.textContent = "Save"
+    saveBtn.onclick = (() => saveEditTask(saveBtn))
+
+    let cancelBtn = document.createElement("button")
+    cancelBtn.textContent = "Cancel"
+    cancelBtn.onclick = (() => cancelEditTask(cancelBtn, existingText))
+
+    li.replaceChild(saveBtn, btn)
+    li.replaceChild(cancelBtn, saveBtn.nextElementSibling)
+}
+
+// take that new input value and change it to a p
+function saveEditTask(btn) {
+    let p = document.createElement("p")
+    let newText = btn.previousElementSibling.value
+    p.textContent = newText
+    console.log(p.textContent)
+}
+
+// move everything back
+function cancelEditTask(btn, txt) {
+
 }

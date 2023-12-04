@@ -150,9 +150,9 @@ li>.delete:hover {
 
 /* Edit Task */
 
-ul li input[type=text] {
+/* ul li input[type=text] {
     display: none;
-}
+} */
 
 ul li.editMode input[type=text] {
     display: block;
