@@ -5,10 +5,13 @@
 {% endblock %}
 
 {% block body %}
-<h1>The login page</h1>
-<form class="login-logout" id="logout">
-    <input type="text" name="username" />
-    <input type="password" name="password" />
-    <button type="submit">Submit</button>
-</form>
+    <div class="login-logout">
+        <h1>Logout</h1>
+        <form id="logout">
+            <input type="text" name="username" placeholder="Enter Username"/>
+            <input type="password" name="password" placeholder="Enter Password"/>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
 {% endblock %}

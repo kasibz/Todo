@@ -13,9 +13,21 @@ app.config['MYSQL_DB'] = 'todo'
 mysql = MySQL(app)
 
 # test route
+@app.route("/")
+def home():
+    return render_template("index.html")
+
 @app.route("/login")
 def login():
     return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    return render_template("logout.html")
+
+@app.route("/signup")
+def signup():
+    return render_template("signup.html")
 
 @app.route("/savetodo", methods = ["POST"])
 def post_todo():
@@ -42,7 +54,7 @@ def post_todo():
 
 # get
 @app.route("/gettodos")
-def home():
+def get_todos():
     try:
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM todoitem")

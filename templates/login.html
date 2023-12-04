@@ -5,10 +5,13 @@
 {% endblock %}
 
 {% block body %}
-<h1>The login page</h1>
-<form class="login-logout" id="login">
-    <input type="text" name="username" />
-    <input type="password" name="password" />
-    <button type="submit">Submit</button>
-</form>
+<div class="login-logout">
+    <h1>Login</h1>
+    <form id="login">
+        <input type="text" name="username" placeholder="Enter Username"/>
+        <input type="password" name="password" placeholder="Enter Password"/>
+        <button type="submit">Submit</button>
+    </form>
+    <h3>No account? <a href="{{ url_for('signup') }}">Sign Up Then</a></h3>
+</div>
 {% endblock %}

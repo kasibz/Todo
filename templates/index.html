@@ -9,6 +9,12 @@
     {% block head %}{% endblock %}
 </head>
 <body>
+    <nav>
+        <span><a href="{{ url_for('home') }}">Todo</a></span>
+        <span><a href="{{ url_for('login') }}">Login</a></span>
+        <span><a href="{{ url_for('logout') }}">Logout</a></span>
+        <span><a href="{{ url_for('signup') }}">Signup</a></span>
+    </nav>
     {% block body %} 
     <div class="container">
         <div class="section1">

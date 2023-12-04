@@ -167,3 +167,34 @@ ul li.editMode label {
     float: right;
     text-align: center;
 }
+
+.login-logout {
+    display: flex;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    background-image: linear-gradient(to bottom right, #B2FEFA 40%, #eee);
+    background-color: #B2FEFA;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    margin: 10rem auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 250px;
+}
+
+.login-logout input {
+    margin: 0.5rem;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    border-radius: 0.5rem;
+    background-image: linear-gradient(to bottom right, #B2FEFA 40%, #eee);
+    background-color: #B2FEFA;
+    padding: 1rem;
+    width: 40vw;
+    margin: 0;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
