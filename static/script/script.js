@@ -24,8 +24,8 @@ function createTask(text) {
     // things to append to bullet li
     let checkbox = document.createElement("input")
     checkbox.type = "checkbox"
-    let p = document.createElement("p")
-    p.textContent = text
+    let label = document.createElement("label")
+    label.textContent = text
 
     let editBtn = document.createElement("button")
     editBtn.textContent = "Edit"
@@ -36,7 +36,7 @@ function createTask(text) {
     deleteBtn.onclick = (() => deleteTask(deleteBtn))
 
     bullet.appendChild(checkbox)
-    bullet.appendChild(p)
+    bullet.appendChild(label)
     bullet.appendChild(editBtn)
     bullet.appendChild(deleteBtn)
     return bullet
@@ -52,14 +52,15 @@ function deleteTask(btn) {
 function editTask(btn) {
     let li = btn.parentNode
     let ul = li.parentNode
-    let p = btn.previousElementSibling
-    let existingText = p.textContent
+    let label = btn.previousElementSibling
+    let existingText = label.textContent
 
     let input = document.createElement("input")
     input.type = "text"
-    input.value = p.textContent
+    input.value = label.textContent
 
-    li.replaceChild(input, p)
+    li.removeChild(label.previousElementSibling)
+    li.replaceChild(input, label)
 
 
     let saveBtn = document.createElement("button")
@@ -76,13 +77,53 @@ function editTask(btn) {
 
 // take that new input value and change it to a p
 function saveEditTask(btn) {
-    let p = document.createElement("p")
+    let label = document.createElement("label")
     let newText = btn.previousElementSibling.value
-    p.textContent = newText
-    console.log(p.textContent)
+    label.textContent = newText
+    
+    let li = btn.parentNode
+    li.replaceChild(label, btn.previousElementSibling)
+
+    let checkbox = document.createElement("input")
+    checkbox.type = "checkbox"
+
+    let editBtn = document.createElement("button")
+    editBtn.textContent = "Edit"
+    editBtn.onclick = (() => editTask(editBtn))
+
+    let deleteBtn = document.createElement("button")
+    deleteBtn.textContent = "Delete"
+    deleteBtn.onclick = (() => deleteTask(deleteBtn))
+
+    li.insertBefore(checkbox, label)
+    li.replaceChild(editBtn, btn)
+    li.replaceChild(deleteBtn, editBtn.nextElementSibling)
+    
 }
 
 // move everything back
 function cancelEditTask(btn, txt) {
+    let li = btn.parentNode
+    let saveBtn = btn.previousElementSibling
+    let input = saveBtn.previousElementSibling
+
+    let label = document.createElement("label")
+    label.textContent = txt
+
+    let checkbox = document.createElement("input")
+    checkbox.type = "checkbox"
+
+    let editBtn = document.createElement("button")
+    editBtn.textContent = "Edit"
+    editBtn.onclick = (() => editTask(editBtn))
+
+    let deleteBtn = document.createElement("button")
+    deleteBtn.textContent = "Delete"
+    deleteBtn.onclick = (() => deleteTask(deleteBtn))
+
+    li.insertBefore(checkbox, input)
+    li.replaceChild(label, input)
+    li.replaceChild(editBtn, saveBtn)
+    li.replaceChild(deleteBtn, btn)
 
 }
