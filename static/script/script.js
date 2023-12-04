@@ -24,6 +24,10 @@ function createTask(text) {
     // things to append to bullet li
     let checkbox = document.createElement("input")
     checkbox.type = "checkbox"
+    checkbox.addEventListener('change', () => {
+        checkbox.checked ? completeBullet(bullet) : uncompleteBullet(bullet)
+    })
+
     let label = document.createElement("label")
     label.textContent = text
 
@@ -125,5 +129,15 @@ function cancelEditTask(btn, txt) {
     li.replaceChild(label, input)
     li.replaceChild(editBtn, saveBtn)
     li.replaceChild(deleteBtn, btn)
+}
 
+// handle the checked box
+function completeBullet(bullet) {
+    let container = document.getElementById('completed-tasks')
+    container.appendChild(bullet)
+}
+
+function uncompleteBullet(bullet) {
+    let container = document.getElementById('incomplete-tasks')
+    container.appendChild(bullet)
 }
