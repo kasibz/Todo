@@ -94,6 +94,9 @@ function saveEditTask(btn) {
 
     let checkbox = document.createElement("input")
     checkbox.type = "checkbox"
+    checkbox.addEventListener('change', () => {
+        checkbox.checked ? completeBullet(li) : uncompleteBullet(li)
+    })
 
     let editBtn = document.createElement("button")
     editBtn.textContent = "Edit"
