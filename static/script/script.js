@@ -20,10 +20,30 @@ addButton.addEventListener('click', () => {
 // lets write function to make the 'line' for the entries
 function createTask(text) {
     let bullet = document.createElement("li")
+
+    // things to append to bullet li
     let checkbox = document.createElement("input")
     checkbox.type = "checkbox"
-    let txt = document.createTextNode(text)
+    let p = document.createElement("p")
+    p.textContent = text
+
+    let editBtn = document.createElement("button")
+    editBtn.textContent = "Edit"
+
+    let deleteBtn = document.createElement("button")
+    deleteBtn.textContent = "Delete"
+    deleteBtn.onclick = (() => deleteTask(deleteBtn))
+
     bullet.appendChild(checkbox)
-    bullet.appendChild(txt)
+    bullet.appendChild(p)
+    bullet.appendChild(editBtn)
+    bullet.appendChild(deleteBtn)
     return bullet
+}
+
+// function for each button
+function deleteTask(btn) {
+    let li = btn.parentNode
+    let ul = li.parentNode
+    ul.removeChild(li)
 }
