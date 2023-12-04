@@ -14,3 +14,14 @@ VALUES
 0,
 'high',
 '2 hours');
+
+INSERT INTO `todo`.`todoitem`
+(
+`taskName`,
+`dateCompleted`,
+`completionStatus`)
+VALUES
+(
+'wake up for work',
+'2023-02-01',
+0);

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, request, render_template, jsonify
 from flask_mysqldb import MySQL
 
 
@@ -16,6 +16,26 @@ mysql = MySQL(app)
 def hello():
     return render_template("index.html")
 
+@app.route("/savetodo", methods = ["POST"])
+def post_todo():
+    try:
+        data = request.json
+        
+        taskName = data['taskName']
+        dateCompleted = data['dateCompleted']
+        completionStatus = data['completionStatus']
+
+        cur = mysql.connection.cursor()
+        cur.execute('''
+            INSERT INTO todoitem (taskName, dateCompleted, completionStatus)
+                VALUES (%s, %s, %s)''', (taskName, dateCompleted, completionStatus))
+        mysql.connection.commit()
+        return "posted sucessfully"
+    
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+
 @app.route("/db")
 def home():
     try:
@@ -29,11 +49,8 @@ def home():
             result.append({
                 "id": row[0],
                 "taskName": row[1],
-                "dateCreated": row[2],
-                "dateCompleted": row[3],
-                "completionStatus": row[4],
-                "priority": row[5],
-                "timeToComplete": row[6]
+                "dateCompleted": row[2],
+                "completionStatus": row[3]
             })
 
         cur.close()
