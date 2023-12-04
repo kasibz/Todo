@@ -22,17 +22,19 @@ def post_todo():
     try:
         data = request.json
         print(data)
-        taskName = data['taskName']
-        dateCompleted = data['dateCompleted']
-        completionStatus = data['completionStatus']
+        for todo in data:
 
-        cur = mysql.connection.cursor()
-        # despite saving completionsStatus as string it knew it was number when
-        # I did get request
-        cur.execute('''
-            INSERT INTO todoitem (taskName, dateCompleted, completionStatus)
-                VALUES (%s, %s, %s)''', (taskName, dateCompleted, completionStatus))
-        mysql.connection.commit()
+            taskName = todo['taskName']
+            dateCompleted = todo['dateCompleted']
+            completionStatus = todo['completionStatus']
+
+            cur = mysql.connection.cursor()
+            # despite saving completionsStatus as string it knew it was number when
+            # I did get request
+            cur.execute('''
+                INSERT INTO todoitem (taskName, dateCompleted, completionStatus)
+                    VALUES (%s, %s, %s)''', (taskName, dateCompleted, completionStatus))
+            mysql.connection.commit()
         return "posted sucessfully"
     
     except Exception as e:
