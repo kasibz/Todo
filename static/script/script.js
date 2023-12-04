@@ -11,6 +11,13 @@
 let addButton = document.getElementById('add-Btn')
 let addButtonInput = document.getElementById('new-task') // no Input yet so wait
 let taskList = document.getElementById('incomplete-tasks')
+let completedTaskList = document.getElementById('completed-tasks')
+
+let clrBtn = document.getElementById('clear')
+clrBtn.addEventListener('click', () => {
+    taskList.replaceChildren()
+    completedTaskList.replaceChildren()
+})
 
 // so this needs to append a check box ul type thing with text and two buttons to the section2
 addButton.addEventListener('click', () => {
