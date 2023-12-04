@@ -13,9 +13,9 @@ app.config['MYSQL_DB'] = 'todo'
 mysql = MySQL(app)
 
 # test route
-@app.route("/")
-def hello():
-    return render_template("index.html")
+@app.route("/login")
+def login():
+    return render_template("login.html")
 
 @app.route("/savetodo", methods = ["POST"])
 def post_todo():

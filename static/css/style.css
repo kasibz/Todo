@@ -79,7 +79,7 @@ label[for='new-task'] {
     text-transform: uppercase;
 }
 
-input[type="text"] {
+input[type="text"], [type="password"] {
     margin: 0;
     font-size: 18px;
     line-height: 18px;
@@ -92,7 +92,7 @@ input[type="text"] {
     color: #888;
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus, [type="password"]:focus {
     color: #333;
 }
 

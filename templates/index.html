@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Simple Todo</title>
+    {% block head %}{% endblock %}
 </head>
 <body>
+    {% block body %} 
     <div class="container">
         <div class="section1">
             <h1 id="title">TO DO LIST</h1>
-            {{data}}
             <p>
                 <label for="new-task">Add Tasks</label>
                 <input id="new-task" type="text">
@@ -26,13 +28,7 @@
         <div class="section3">
             <h3>Completed Tasks</h3>
             <ul id="completed-tasks">
-                <!-- <li>
-                    <input type="checkbox" checked="">
-                    <label>Learn JavaScript</label>
-                    <input type="text">
-                    <button class="edit">Edit</button>
-                    <button class="delete">Delete</button>
-                </li> -->
+
             </ul>
         </div>
         <div class="section4">
@@ -44,8 +40,9 @@
             </button>
         </div>
     </div>
-
+    {% endblock %}
 </body>
 <script src="{{ url_for('static', filename='script/script.js') }}"></script>
 <script src="{{ url_for('static', filename='script/api.js') }}"></script>
+<script src="{{ url_for('static', filename='script/authentication.js') }}"></script>
 </html>
