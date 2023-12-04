@@ -4,6 +4,7 @@
 // o	Mark tasks as done
 // o	Delete a task
 // o	Clear all tasks
+
 // First off, out to do list app must need an option that we can add a task to the list, and later on, we can edit the task as we want. Next, after finishing a task, we should mark it as complete and move this task to another section. Also, we want to make our app more flexible, so we add another option to delete an unfinished task. After all, when the list becomes too verbose, we have a last option to clear all the tasks, both completed and uncompleted.
 
 
@@ -13,11 +14,7 @@ let addButtonInput = document.getElementById('new-task') // no Input yet so wait
 let taskList = document.getElementById('incomplete-tasks')
 let completedTaskList = document.getElementById('completed-tasks')
 
-let clrBtn = document.getElementById('clear')
-clrBtn.addEventListener('click', () => {
-    taskList.replaceChildren()
-    completedTaskList.replaceChildren()
-})
+
 
 // so this needs to append a check box ul type thing with text and two buttons to the section2
 addButton.addEventListener('click', () => {
@@ -147,4 +144,75 @@ function completeBullet(bullet) {
 function uncompleteBullet(bullet) {
     let container = document.getElementById('incomplete-tasks')
     container.appendChild(bullet)
+}
+
+
+// clear all elements with clear button
+let clrBtn = document.getElementById('clear')
+clrBtn.addEventListener('click', () => {
+    taskList.replaceChildren()
+    completedTaskList.replaceChildren()
+})
+
+// save all to backend
+let postBtn = document.getElementById('save')
+postBtn.addEventListener('click', () => {
+    console.log("this will be a series of post requests or just one large dictionary?")
+    completedListItems = completedTaskList.getElementsByTagName('li')
+    taskListItems = taskList.getElementsByTagName('li')
+    console.log(completedListItems)
+    console.log(taskListItems)
+
+    let dataList = []
+    // correct way to iterate
+    for (li of completedListItems) {
+        let children = li.children
+        let tempLi = {
+            "taskName": children[1].textContent,
+            "dateCompleted": getCurrentDate(),
+            "completionStatus": children[0].checked ? 1 : 0
+        }
+        dataList.push(tempLi)
+    }
+
+    for (li of taskListItems) {
+        let children = li.children
+        let tempLi = {
+            "taskName": children[1].textContent,
+            "dateCompleted": getCurrentDate(),
+            "completionStatus": children[0].checked ? 1 : 0
+        }
+        dataList.push(tempLi)
+    }
+
+    fetch('/savetodo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataList)
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Success", data)
+    })
+    .catch(e => {
+        console.error("Error", e)
+    })
+
+})
+
+function getCurrentDate() {
+    // Create a new Date object representing the current date and time
+    var currentDate = new Date();
+
+    // Get the individual components of the date
+    var year = currentDate.getUTCFullYear();
+    var month = String(currentDate.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so add 1
+    var day = String(currentDate.getUTCDate()).padStart(2, '0');
+
+    // Format the date as "YYYY-MM-DD"
+    var formattedDate = year + '-' + month + '-' + day;
+
+    return formattedDate;
 }

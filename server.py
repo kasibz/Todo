@@ -12,6 +12,7 @@ app.config['MYSQL_DB'] = 'todo'
 
 mysql = MySQL(app)
 
+# test route
 @app.route("/")
 def hello():
     return render_template("index.html")
@@ -20,12 +21,14 @@ def hello():
 def post_todo():
     try:
         data = request.json
-        
+        print(data)
         taskName = data['taskName']
         dateCompleted = data['dateCompleted']
         completionStatus = data['completionStatus']
 
         cur = mysql.connection.cursor()
+        # despite saving completionsStatus as string it knew it was number when
+        # I did get request
         cur.execute('''
             INSERT INTO todoitem (taskName, dateCompleted, completionStatus)
                 VALUES (%s, %s, %s)''', (taskName, dateCompleted, completionStatus))
@@ -35,8 +38,8 @@ def post_todo():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-
-@app.route("/db")
+# get
+@app.route("/gettodos")
 def home():
     try:
         cur = mysql.connection.cursor()
