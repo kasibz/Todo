@@ -149,7 +149,6 @@ function uncompleteBullet(bullet) {
     container.appendChild(bullet)
 }
 
-
 // clear all elements with clear button
 let clrBtn = document.getElementById('clear')
 clrBtn.addEventListener('click', () => {
@@ -157,65 +156,5 @@ clrBtn.addEventListener('click', () => {
     completedTaskList.replaceChildren()
 })
 
-// save all to backend
-let postBtn = document.getElementById('save')
-postBtn.addEventListener('click', () => {
-    console.log("this will be a series of post requests or just one large dictionary?")
-    completedListItems = completedTaskList.getElementsByTagName('li')
-    taskListItems = taskList.getElementsByTagName('li')
-    console.log(completedListItems)
-    console.log(taskListItems)
 
-    let dataList = []
-    // correct way to iterate
-    for (li of completedListItems) {
-        let children = li.children
-        let tempLi = {
-            "taskName": children[1].textContent,
-            "dateCompleted": getCurrentDate(),
-            "completionStatus": children[0].checked ? 1 : 0
-        }
-        dataList.push(tempLi)
-    }
 
-    for (li of taskListItems) {
-        let children = li.children
-        let tempLi = {
-            "taskName": children[1].textContent,
-            "dateCompleted": getCurrentDate(),
-            "completionStatus": children[0].checked ? 1 : 0
-        }
-        dataList.push(tempLi)
-    }
-
-    fetch('/savetodo', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataList)
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log("Success", data)
-    })
-    .catch(e => {
-        console.error("Error", e)
-    })
-
-})
-
-function getCurrentDate() {
-    // Create a new Date object representing the current date and time
-    var currentDate = new Date();
-
-    // Get the individual components of the date
-    var year = currentDate.getUTCFullYear();
-    var month = String(currentDate.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so add 1
-    var day = String(currentDate.getUTCDate()).padStart(2, '0');
-
-    // Format the date as "YYYY-MM-DD"
-    var formattedDate = year + '-' + month + '-' + day;
-
-    return formattedDate;
-}
