@@ -65,6 +65,7 @@ def login():
             # using .get instead of bracket gave me a NoneType
             if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
                 session['username'] = user['username']
+                session['user_id'] = user['id']
                 flash(f"Logged in as {username}")
                 return redirect(url_for('home'))
             else:
