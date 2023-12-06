@@ -27,7 +27,7 @@ def login_required(f):
     # short answer, you can pass anything to this function
     # long answer... protecting route by checking user_id in session
     def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
+        if 'username' not in session:
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -64,7 +64,7 @@ def login():
             
             # using .get instead of bracket gave me a NoneType
             if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-                session['user_id'] = user['id']
+                session['username'] = user['username']
                 flash(f"Logged in as {username}")
                 return redirect(url_for('home'))
             else:
@@ -125,13 +125,14 @@ def post_todo():
             taskName = todo['taskName']
             dateCompleted = todo['dateCompleted']
             completionStatus = todo['completionStatus']
+            user_id = todo['user_id']
 
             cur = db.connection.cursor()
             # despite saving completionsStatus as string it knew it was number when
             # I did get request
             cur.execute('''
-                INSERT INTO todoitem (taskName, dateCompleted, completionStatus)
-                    VALUES (%s, %s, %s)''', (taskName, dateCompleted, completionStatus))
+                INSERT INTO todoitem (taskName, dateCompleted, completionStatus, user_id)
+                    VALUES (%s, %s, %s, %s)''', (taskName, dateCompleted, completionStatus, user_id))
             db.connection.commit()
         return ({"message":"posted sucessfully"})
     
@@ -144,6 +145,23 @@ def get_todos():
     try:
         cur = db.connection.cursor()
         cur.execute("SELECT * FROM todoitem")
+        data = cur.fetchall()
+
+        cur.close()
+        return jsonify(data)
+
+    # render_template gives you the view. I don't want the view
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    
+# get
+@app.route("/gettodos/<int:user_id>")
+def get_todo_by_user(user_id):
+    try:
+        cur = db.connection.cursor()
+        cur.execute('''
+            SELECT * FROM todoitem WHERE user_id = %s
+                    ''', (user_id, ))
         data = cur.fetchall()
 
         cur.close()
