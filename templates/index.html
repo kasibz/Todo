@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Simple Todo</title>
     {% block head %}{% endblock %}
+    <script>
+        let username = "{{ session.get('username') }}"
+        let userId = "{{ session.get('user_id') }}"
+        username && sessionStorage.setItem('username', username)
+        userId && sessionStorage.setItem('userId', userId)
+    </script>
 </head>
 <body>
     <nav>
@@ -14,9 +20,11 @@
         <span><a href="{{ url_for('login') }}">Login</a></span>
         <span><a href="{{ url_for('logout') }}">Logout</a></span>
         <span><a href="{{ url_for('signup') }}">Signup</a></span>
+        <span>Logged in as: {{ session.get('username', "You aren't signed in") }}</span>
     </nav>
     {% block body %} 
     <div class="container">
+
         <div class="section1">
             <h1 id="title">TO DO LIST</h1>
             <p>
