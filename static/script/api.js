@@ -15,7 +15,8 @@ postBtn.addEventListener('click', () => {
         let tempLi = {
             "taskName": children[1].textContent,
             "dateCompleted": getCurrentDate(),
-            "completionStatus": children[0].checked ? 1 : 0
+            "completionStatus": children[0].checked ? 1 : 0,
+            "user_id": user_id
         }
         dataList.push(tempLi)
     }
@@ -25,7 +26,8 @@ postBtn.addEventListener('click', () => {
         let tempLi = {
             "taskName": children[1].textContent,
             "dateCompleted": children[0].checked ? getCurrentDate() : null,
-            "completionStatus": children[0].checked ? 1 : 0
+            "completionStatus": children[0].checked ? 1 : 0,
+            "user_id": user_id
         }
         dataList.push(tempLi)
     }
@@ -47,13 +49,15 @@ postBtn.addEventListener('click', () => {
 
 })
 
+let user_id = sessionStorage.getItem("userId")
+
 
 // the get request to populate the page
 document.addEventListener('DOMContentLoaded', () => {
     completedListItems = completedTaskList.getElementsByTagName('li')
     taskListItems = taskList.getElementsByTagName('li')
 
-    fetch('/gettodos', {
+    fetch(`/gettodos/${user_id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
