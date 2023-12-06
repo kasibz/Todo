@@ -7,10 +7,10 @@
 {% block body %}
     <div class="login-logout">
         <h1>Logout</h1>
-        <form id="logout" method="POST">
-            <input type="text" name="username" placeholder="Enter Username"/>
-            <input type="password" name="password" placeholder="Enter Password"/>
-            <button type="submit">Submit</button>
+        <form id="logout" method="POST" action="{{ url_for('logout') }}">
+            <h2>Are you sure you want to logout?</h2>
+            <button type="submit">Yes</button>
+            <button id="no-logout">No</button>
         </form>
     </div>
 
