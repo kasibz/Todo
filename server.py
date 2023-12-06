@@ -1,9 +1,10 @@
-from flask import Flask, request, render_template, redirect, jsonify, url_for, flash
+from flask import Flask, request, render_template, redirect, jsonify, url_for, flash, session
 from flask_mysqldb import MySQL
 import bcrypt
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -20,8 +21,20 @@ app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
 db = MySQL(app)
 
-# test route
+# custom decorator to protect route
+def login_required(f):
+    @wraps(f)
+    # short answer, you can pass anything to this function
+    # long answer... protecting route by checking user_id in session
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# home
 @app.route("/")
+@login_required
 def home():
     return render_template("index.html")
 
@@ -34,7 +47,6 @@ def login():
         try:
             username = request.form['username']
             password = request.form['password']
-            print(username, password)
 
             if not username:
                 return jsonify({'error': 'Missing username!'}), 400
@@ -52,6 +64,7 @@ def login():
             
             # using .get instead of bracket gave me a NoneType
             if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+                session['user_id'] = user['id']
                 flash(f"Logged in as {username}")
                 return redirect(url_for('home'))
             else:
@@ -60,9 +73,15 @@ def login():
         except Exception as e:
             return jsonify({'error': str(e)})
 
-@app.route("/logout")
+@app.route("/logout", methods = ["GET", "POST"])
+@login_required
 def logout():
-    return render_template("logout.html")
+    if request.method == "GET":
+        return render_template("logout.html")
+    
+    if request.method == "POST":
+        session.clear()
+        return redirect(url_for('login'))
 
 @app.route("/signup", methods = ["GET", "POST"])
 def signup():
@@ -71,8 +90,8 @@ def signup():
     
     if request.method == "POST":
         try:
-            username = request.json.get('username')
-            password = str(request.json.get('password'))
+            username = request.form['username']
+            password = request.form['password']
 
             if not username:
                 return jsonify({'error': 'Missing username!'})
@@ -90,7 +109,8 @@ def signup():
                 INSERT INTO user (username, password)
                     VALUES (%s, %s)''', (username, hashed))
             db.connection.commit()
-            return ({"message":f"welcome {username}!"})
+            flash(f"log back in {username}!")
+            return redirect(url_for('login'))
         except Exception as e:
             return jsonify({'error': str(e)})
 
