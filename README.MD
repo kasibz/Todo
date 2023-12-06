@@ -6,6 +6,7 @@ Make a todo list and click "save" to save your items
 - Items can be edited and canceled mid edit
 - All items can get cleared at once
 - Items saved to MySQL backend through flask and populate page from db on page load
+- Flask User Authentication
 
 ### Incoming Feature
-- Flask User Authentication
+- Dark Mode
