@@ -2,6 +2,7 @@
 // let completedTaskList = document.getElementById('completed-tasks')
 
 // save all to backend
+
 let postBtn = document.getElementById('save')
 postBtn.addEventListener('click', () => {
     completedListItems = completedTaskList.getElementsByTagName('li')
