@@ -26,6 +26,7 @@ def login_required(f):
     @wraps(f)
     # short answer, you can pass anything to this function
     # long answer... protecting route by checking user_id in session
+    # further more,
     def decorated_function(*args, **kwargs):
         if 'username' not in session:
             return redirect(url_for('login'))
