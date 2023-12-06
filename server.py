@@ -1,17 +1,22 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, redirect, jsonify, url_for, flash
 from flask_mysqldb import MySQL
 import bcrypt
-
+from pathlib import Path
 import os
-
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+
+BASE_DIR = Path(__file__)
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+app.secret_key = os.environ.get('SECRET_KEY')
 
 # db connection
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'todo'
+app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
 db = MySQL(app)
 
@@ -26,9 +31,34 @@ def login():
         return render_template("login.html")
     
     if request.method == "POST":
-        username = request.json.get('username')
-        password = request.json.get('password')
-        return ({"message":"posted sucessfully"})
+        try:
+            username = request.form['username']
+            password = request.form['password']
+            print(username, password)
+
+            if not username:
+                return jsonify({'error': 'Missing username!'}), 400
+            
+            if not password:
+                return jsonify({'error': 'Missing password!'}), 400
+
+            cur = db.connection.cursor()
+            cur.execute('''
+                SELECT * FROM user WHERE username = %s
+                ''', (username,))
+            user = cur.fetchone()
+            if not user:
+                return "Missing User", 400
+            
+            # using .get instead of bracket gave me a NoneType
+            if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+                flash(f"Logged in as {username}")
+                return redirect(url_for('home'))
+            else:
+                return ({"message": "no user found"}, 400)
+            
+        except Exception as e:
+            return jsonify({'error': str(e)})
 
 @app.route("/logout")
 def logout():
@@ -42,7 +72,7 @@ def signup():
     if request.method == "POST":
         try:
             username = request.json.get('username')
-            password = request.json.get('password')
+            password = str(request.json.get('password'))
 
             if not username:
                 return jsonify({'error': 'Missing username!'})
@@ -96,18 +126,8 @@ def get_todos():
         cur.execute("SELECT * FROM todoitem")
         data = cur.fetchall()
 
-        #unpack data
-        result = []
-        for row in data:
-            result.append({
-                "id": row[0],
-                "taskName": row[1],
-                "dateCompleted": row[2],
-                "completionStatus": row[3]
-            })
-
         cur.close()
-        return jsonify(result)
+        return jsonify(data)
 
     # render_template gives you the view. I don't want the view
     except Exception as e:
@@ -120,17 +140,8 @@ def users():
         cur.execute("SELECT * FROM user")
         data = cur.fetchall()
 
-                #unpack data
-        result = []
-        for row in data:
-            result.append({
-                "id": row[0],
-                "username": row[1],
-                "password": row[2]
-            })
-
         cur.close()
-        return jsonify(result)
+        return jsonify(data)
 
     # render_template gives you the view. I don't want the view
     except Exception as e:
